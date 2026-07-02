@@ -1,0 +1,26 @@
+{
+  "name": "jfrog",
+  "displayName": "JFrog Platform",
+  "version": "0.0.1",
+  "description": "Official JFrog plugin for Devin (scaffold). Skills, MCP, and Agent Guard ship in sequenced releases.",
+  "author": {
+    "name": "JFrog Ltd.",
+    "email": "devrel@jfrog.com",
+    "url": "https://jfrog.com"
+  },
+  "homepage": "https://jfrog.com",
+  "license": "Apache-2.0",
+  "keywords": [
+    "jfrog",
+    "artifactory",
+    "xray",
+    "security",
+    "devops",
+    "supply-chain",
+    "artifacts",
+    "curation",
+    "agent-guard",
+    "ai-catalog",
+    "mcp"
+  ]
+}
