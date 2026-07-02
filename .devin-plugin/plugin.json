@@ -1,14 +1,15 @@
 {
   "name": "jfrog",
   "displayName": "JFrog Platform",
-  "version": "0.0.1",
-  "description": "Official JFrog plugin for Devin (scaffold). Skills, MCP, and Agent Guard ship in sequenced releases.",
+  "version": "0.1.0",
+  "description": "Official JFrog plugin for Devin. Ships the JFrog skills bundle for platform operations and package safety checks.",
   "author": {
     "name": "JFrog Ltd.",
     "email": "devrel@jfrog.com",
     "url": "https://jfrog.com"
   },
   "homepage": "https://jfrog.com",
+  "repository": "https://github.jfrog.info/asalaz/devin-plugin",
   "license": "Apache-2.0",
   "keywords": [
     "jfrog",
