@@ -1,7 +1,7 @@
 {
   "name": "jfrog",
   "displayName": "JFrog Platform",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Official JFrog plugin for Devin. Ships the JFrog skills bundle for platform operations and package safety checks.",
   "author": {
     "name": "JFrog Ltd.",

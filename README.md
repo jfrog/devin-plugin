@@ -2,7 +2,7 @@
 
 JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact management, security scanning, and supply-chain workflows.
 
-> **Current version:** `0.1.0` — includes the official JFrog skills bundle from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills).
+> **Current version:** `0.1.1` — includes the official JFrog skills bundle from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pinned at `v0.16.0`).
 
 ## Skills
 
@@ -10,8 +10,9 @@ JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact 
 | --- | --- |
 | `jfrog` | JFrog Platform operations via CLI and APIs (Artifactory, Xray, access, projects, and more). |
 | `jfrog-package-safety-and-download` | Check package safety and download via Artifactory. |
+| `jfrog-ai-catalog-skills` | Discover, install, manage, and publish agent skills from the JFrog AI Catalog via `jf skills` and Agent Guard. |
 
-After install, Devin exposes them as `/jfrog:jfrog` and `/jfrog:jfrog-package-safety-and-download`.
+After install, Devin exposes them as `/jfrog:jfrog`, `/jfrog:jfrog-package-safety-and-download`, and `/jfrog:jfrog-ai-catalog-skills`.
 
 Skill content is vendored under `skills/` — see [VENDOR.md](VENDOR.md).
 
@@ -19,7 +20,7 @@ Skill content is vendored under `skills/` — see [VENDOR.md](VENDOR.md).
 
 - **Devin CLI** — see [Devin docs](https://docs.devin.ai/)
 - **Devin CLI plugins enabled** for your organization (`devin plugins install` must be allowed)
-- **Skill runtime** (when using the skills) — `jf` CLI, `jq`, and `curl` on `PATH`, plus `JFROG_URL` and `JFROG_ACCESS_TOKEN` (or `jf config add`). See [jfrog-skills requirements](https://github.com/jfrog/jfrog-skills/blob/v0.11.0/README.md#requirements).
+- **Skill runtime** (when using the skills) — `jf` CLI, `jq`, and `curl` on `PATH`, plus `JFROG_URL` and `JFROG_ACCESS_TOKEN` (or `jf config add`). See [jfrog-skills requirements](https://github.com/jfrog/jfrog-skills/blob/v0.16.0/README.md#requirements).
 
 ## Installation
 
@@ -53,7 +54,8 @@ devin-plugin/
 ├── .devin-plugin/plugin.json
 ├── skills/
 │   ├── jfrog/
-│   └── jfrog-package-safety-and-download/
+│   ├── jfrog-package-safety-and-download/
+│   └── jfrog-ai-catalog-skills/
 ├── .github/scripts/          # sync-skills vendoring
 ├── LICENSE
 ├── README.md
@@ -68,7 +70,7 @@ node scripts/validate-devin-plugin.mjs
 
 ## Versioning
 
-Bump `version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) when you publish a new release, then tag (for example `v0.1.0`).
+Bump `version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) when you publish a new release, then tag (for example `v0.1.1`).
 
 ## License
 
