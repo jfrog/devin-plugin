@@ -10,7 +10,7 @@ All contributors must sign the [JFrog CLA](https://jfrog.com/cla/) before contri
 
 1. **Fork** the repository and create a feature branch from `main`.
 2. Make your changes, ensuring they follow the existing code style and project conventions.
-3. **Validate** locally (once `scripts/validate-devin-plugin.mjs` is added):
+3. **Validate** locally:
 
 ```bash
 node scripts/validate-devin-plugin.mjs
@@ -42,13 +42,13 @@ This downloads the pinned upstream tarball and replaces the contents of `skills/
 
 ## Pre-release checklist
 
-- [ ] `node scripts/validate-devin-plugin.mjs` passes (when present).
+- [ ] `node scripts/validate-devin-plugin.mjs` passes.
 - [ ] Version bumped in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) when the plugin changes.
 - [ ] No secrets, credentials, or files under `**/local-cache/` committed.
 - [ ] If the skill tree changed: `pin` in `.github/scripts/sync-skills-vendor.json` matches the upstream tag the new tree was generated from.
 - [ ] Smoke-test: `devin plugins install . -y` and `devin plugins info jfrog` from the repo root.
 
-## Build order (AX-1635)
+## Build order
 
 Releases follow a fixed sequence:
 
@@ -60,7 +60,7 @@ Do not merge MCP or Agent Guard changes before the preceding layer is complete.
 
 ## Reporting Issues
 
-Open a GitHub issue on this repository with:
+Open a [GitHub issue](https://github.com/jfrog/devin-plugin/issues) with:
 
 - A clear title and description of the problem.
 - Steps to reproduce (if applicable).

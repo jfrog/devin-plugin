@@ -24,19 +24,9 @@ Skill content is vendored under `skills/` — see [VENDOR.md](VENDOR.md).
 
 ## Installation
 
-### Local path
-
 ```bash
-devin plugins install /path/to/devin-plugin -y
+devin plugins install jfrog/devin-plugin -y
 ```
-
-### From GitHub
-
-```bash
-devin plugins install https://github.jfrog.info/asalaz/devin-plugin.git -y
-```
-
-Private GitHub Enterprise hosts may require SSH, stored credentials, or a local path install.
 
 ## Verify
 
