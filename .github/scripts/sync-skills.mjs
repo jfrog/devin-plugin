@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+
+// Copyright (c) JFrog Ltd. 2026
+// Licensed under the Apache License, Version 2.0
+// https://www.apache.org/licenses/LICENSE-2.0
+
 // Vendors skill content from the upstream jfrog/jfrog-skills repository
 // into this plugin. Run manually when bumping the pin: bump `pin` in
 // sync-skills-vendor.json, then run this
