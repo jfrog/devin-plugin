@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Copyright (c) JFrog Ltd. 2026
+# Licensed under the Apache License, Version 2.0
+# https://www.apache.org/licenses/LICENSE-2.0
+#
 # check-environment.sh — Cached JFrog CLI environment check
 #
 # Checks if jf is installed and its version, using a 24h-TTL cache
