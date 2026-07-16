@@ -1,3 +1,4 @@
+# Copyright (c) JFrog Ltd. 2026
 name: Release
 
 on:
@@ -15,10 +16,12 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # Check out the repository with a token to allow pushing tags
+      - uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Parse the commit message to check if a release tag keyword is present
       - name: Detect release tag in commit message
         id: detect
         run: |
@@ -29,21 +32,25 @@ jobs:
             echo "triggered=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # Read the current version from the VERSION file
       - name: Read version
         if: steps.detect.outputs.triggered == 'true'
         id: version
         run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
 
+      # Create a git tag for the release version and push it to origin
       - name: Create and push tag
         if: steps.detect.outputs.triggered == 'true'
         run: |
           git tag "v${{ steps.version.outputs.version }}"
           git push origin "v${{ steps.version.outputs.version }}"
 
+      # Package the repository contents into a zip archive for the release
       - name: Package release artifact
         if: steps.detect.outputs.triggered == 'true'
         run: zip -r release.zip . --exclude ".git/*" --exclude ".github/*"
 
+      # Create a GitHub Release with the packaged artifact and auto-generated release notes
       - name: Create GitHub Release
         if: steps.detect.outputs.triggered == 'true'
         env:
