@@ -52,10 +52,12 @@ This downloads the pinned upstream tarball and replaces the contents of `skills/
 
 To cut a release:
 
-1. In your PR, bump `VERSION` and sync `.devin-plugin/plugin.json` `.version` to match. The `validate-version` PR check enforces this.
+1. In your PR, bump `.version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json). That manifest is the only place the version lives.
 2. Merge to `main` with `[major]`, `[minor]`, or `[patch]` anywhere in the commit message.
 
-The release workflow reads `VERSION`, creates a `vX.Y.Z` git tag, and publishes a GitHub Release with a repo zip attached. No bot push to `main` — the version bump is part of the PR itself.
+The release workflow reads the version from the manifest, creates a `vX.Y.Z` git tag, and publishes a GitHub Release with a repo zip attached. The marker only decides *whether* to release; the version comes from the manifest either way, so the bump is reviewed in the PR that makes it. There is no bot push to `main`.
+
+Merging a marker without bumping the manifest fails the release rather than re-tagging a shipped version.
 
 ## Build order
 

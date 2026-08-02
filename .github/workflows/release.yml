@@ -16,41 +16,64 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      # Check out the repository with a token to allow pushing tags
+      # Full history so the "already released" check below can see existing tags.
       - uses: actions/checkout@v5
         with:
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Parse the commit message to check if a release tag keyword is present
-      - name: Detect release tag in commit message
+      # Releasing is opt-in: only a merge whose commit message carries [major], [minor] or
+      # [patch] cuts one. The marker is purely a trigger — the version itself always comes from
+      # the manifest, so the bump is reviewable in the PR that makes it.
+      # The message is passed through env rather than interpolated into the script, so a commit
+      # subject can never inject shell.
+      - name: Detect release marker in commit message
         id: detect
+        env:
+          MSG: ${{ github.event.head_commit.message }}
         run: |
-          MSG="${{ github.event.head_commit.message }}"
-          if echo "$MSG" | grep -qE '\[(major|minor|patch)\]'; then
+          if printf '%s' "$MSG" | grep -qE '\[(major|minor|patch)\]'; then
             echo "triggered=true" >> "$GITHUB_OUTPUT"
           else
             echo "triggered=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # Read the current version from the VERSION file
-      - name: Read version
+      # .devin-plugin/plugin.json is the single source of truth for the version — it is the file
+      # Devin itself reads. Nothing duplicates it, so there is no drift to police.
+      - name: Read version from the plugin manifest
         if: steps.detect.outputs.triggered == 'true'
         id: version
-        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+        run: |
+          set -euo pipefail
+          VERSION=$(jq -er '.version' .devin-plugin/plugin.json)
+          if ! printf '%s' "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::.devin-plugin/plugin.json version '$VERSION' is not X.Y.Z — refusing to release"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      # Create a git tag for the release version and push it to origin
+      # Catches the one mistake this flow allows: merging a release marker without bumping the
+      # manifest, which would otherwise try to re-tag a version that already shipped.
+      - name: Refuse to re-release an existing version
+        if: steps.detect.outputs.triggered == 'true'
+        run: |
+          TAG="v${{ steps.version.outputs.version }}"
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "::error::$TAG already exists — bump .devin-plugin/plugin.json before merging a release marker"
+            exit 1
+          fi
+
       - name: Create and push tag
         if: steps.detect.outputs.triggered == 'true'
         run: |
-          git tag "v${{ steps.version.outputs.version }}"
-          git push origin "v${{ steps.version.outputs.version }}"
+          TAG="v${{ steps.version.outputs.version }}"
+          git tag "$TAG"
+          git push origin "$TAG"
 
-      # Package the repository contents into a zip archive for the release
       - name: Package release artifact
         if: steps.detect.outputs.triggered == 'true'
         run: zip -r release.zip . --exclude ".git/*" --exclude ".github/*"
 
-      # Create a GitHub Release with the packaged artifact and auto-generated release notes
       - name: Create GitHub Release
         if: steps.detect.outputs.triggered == 'true'
         env:
