@@ -1,8 +1,8 @@
 # JFrog Plugin for Devin
 
-JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact management, security scanning, and supply-chain workflows.
+JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact management, security scanning, and supply-chain workflows, plus the JFrog Platform MCP server (remote HTTP + OAuth).
 
-> **Current version:** `0.1.1` — includes the official JFrog skills bundle from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pinned at `v0.16.0`).
+> **Current version:** `0.2.0` — skills from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pinned at `v0.16.0`) and a bundled JFrog MCP entry.
 
 ## Skills
 
@@ -16,11 +16,31 @@ After install, Devin exposes them as `/jfrog:jfrog`, `/jfrog:jfrog-package-safet
 
 Skill content is vendored under `skills/` — see [VENDOR.md](VENDOR.md).
 
+## JFrog MCP
+
+The plugin registers this MCP server (declared in `mcp_config.json` and referenced from `.devin-plugin/plugin.json`):
+
+```json
+{
+  "mcpServers": {
+    "jfrog": {
+      "url": "https://${env:JFROG_PLATFORM_URL}/mcp"
+    }
+  }
+}
+```
+
+- Auth is **OAuth** against your JFrog Platform — no access token is stored in the plugin.
+- Set `JFROG_PLATFORM_URL` (host only, for example `mycompany.jfrog.io`) in the environment that launches Devin CLI / Devin Local so `${env:JFROG_PLATFORM_URL}` resolves.
+- On first use, authenticate if prompted, or run: `devin mcp login jfrog`
+- Plugin MCP tools are available in-session; they may not appear in the MCP settings UI yet.
+
 ## Prerequisites
 
 - **Devin CLI** — see [Devin docs](https://docs.devin.ai/)
 - **Devin CLI plugins enabled** for your organization (`devin plugins install` must be allowed)
-- **Skill runtime** (when using the skills) — `jf` CLI, `jq`, and `curl` on `PATH`, plus `JFROG_URL` and `JFROG_ACCESS_TOKEN` (or `jf config add`). See [jfrog-skills requirements](https://github.com/jfrog/jfrog-skills/blob/v0.16.0/README.md#requirements).
+- **`JFROG_PLATFORM_URL`** — JFrog platform host only (no `https://`, no trailing `/`). Required for the bundled MCP entry.
+- **Skill runtime** (when using the skills) — `jf` CLI, `jq`, and `curl` on `PATH`, plus a configured JFrog instance (`jf config add`). See [jfrog-skills requirements](https://github.com/jfrog/jfrog-skills/blob/v0.16.0/README.md#requirements).
 
 ## Installation
 
@@ -35,13 +55,22 @@ devin plugins list
 devin plugins info jfrog
 ```
 
-`devin plugins info jfrog` should list the skills above.
+`devin plugins info jfrog` should list the skills above and an MCP server named `jfrog`.
+
+In a Devin CLI or Devin Local session:
+
+```text
+/mcp
+```
+
+Confirm `jfrog` is listed (and Connected after OAuth). Ask the agent to list tools for `jfrog` — it should expose at least one tool.
 
 ## Repository layout
 
 ```
 devin-plugin/
 ├── .devin-plugin/plugin.json
+├── mcp_config.json           # JFrog Platform MCP (remote HTTP + OAuth)
 ├── skills/
 │   ├── jfrog/
 │   ├── jfrog-package-safety-and-download/
@@ -60,7 +89,7 @@ node scripts/validate-devin-plugin.mjs
 
 ## Versioning
 
-Bump `version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) when you publish a new release, then tag (for example `v0.1.1`).
+Bump `version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) when you publish a new release, then tag (for example `v0.2.0`).
 
 ## License
 

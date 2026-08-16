@@ -1,8 +1,8 @@
 {
   "name": "jfrog",
   "displayName": "JFrog Platform",
-  "version": "0.1.1",
-  "description": "Official JFrog plugin for Devin. Ships the JFrog skills bundle for platform operations and package safety checks.",
+  "version": "0.2.0",
+  "description": "Official JFrog plugin for Devin. Ships the JFrog skills bundle and registers the JFrog Platform MCP server (remote HTTP + OAuth).",
   "author": {
     "name": "JFrog Ltd.",
     "email": "devrel@jfrog.com",
@@ -23,5 +23,6 @@
     "agent-guard",
     "ai-catalog",
     "mcp"
-  ]
+  ],
+  "mcpServers": "mcp_config.json"
 }
