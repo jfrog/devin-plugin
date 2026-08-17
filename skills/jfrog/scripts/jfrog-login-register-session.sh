@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Copyright (c) JFrog Ltd. 2026
-# Licensed under the Apache License, Version 2.0
-# https://www.apache.org/licenses/LICENSE-2.0
-#
 # jfrog-login-register-session.sh — Verify a JFrog server and start a web login session
 #
 # Pings the server, generates a session UUID, and registers it with
@@ -50,6 +46,17 @@ JFROG_PLATFORM_URL="${JFROG_PLATFORM_URL%/}"
 
 if ! command -v jf &>/dev/null; then
   echo "ERROR: jf is not installed" >&2
+  exit 1
+fi
+
+# `jf api` was added in JFrog CLI 2.100.0 and every request below depends on it.
+# Check it explicitly: on an older CLI the ping fails with an unknown-command
+# error that carries no HTTP status, which would otherwise be reported as an
+# unreachable server and send the user looking at the network instead of the CLI.
+if ! jf api --help >/dev/null 2>&1; then
+  echo "ERROR: this jf ($(jf --version 2>/dev/null || echo 'version unknown')) does not support 'jf api'," >&2
+  echo "which this login flow requires (JFrog CLI 2.100.0 or later)." >&2
+  echo "Upgrade the JFrog CLI, then retry. See references/jfrog-cli-install-upgrade.md." >&2
   exit 1
 fi
 

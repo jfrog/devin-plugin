@@ -1,8 +1,8 @@
 {
   "name": "jfrog",
   "displayName": "JFrog Platform",
-  "version": "0.2.0",
-  "description": "Official JFrog plugin for Devin. Ships the JFrog skills bundle and registers the JFrog Platform MCP server (remote HTTP + OAuth).",
+  "version": "0.3.0",
+  "description": "Official JFrog plugin for Devin. Ships the JFrog skills bundle (platform ops, MCP management, AI Catalog, package safety, reference architecture, package-manager setup) and registers the JFrog Platform MCP server (remote HTTP + OAuth).",
   "author": {
     "name": "JFrog Ltd.",
     "email": "devrel@jfrog.com",
