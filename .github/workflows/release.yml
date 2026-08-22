@@ -30,19 +30,24 @@ jobs:
         run: |
           set -euo pipefail
           VERSION=$(jq -er '.version' .devin-plugin/plugin.json)
-          if ! printf '%s' "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "::error::.devin-plugin/plugin.json version '$VERSION' is not X.Y.Z — refusing to release"
             exit 1
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
+      # Fails the job on anything but a clean forward bump, so the steps after it need no
+      # condition of their own.
       - name: Compare version against latest release tag
         id: release_gate
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
-          VERSION="${{ steps.version.outputs.version }}"
           git fetch --tags origin
-          LATEST=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | sort -V | tail -1)
+          # git's globs can't anchor digits, so the shape is enforced with grep instead. grep
+          # exits 1 when nothing matches, which is the legitimate first-release case below.
+          LATEST=$(git tag -l | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1) || LATEST=""
           if [ -z "$LATEST" ]; then
             echo "should_release=true" >> "$GITHUB_OUTPUT"
             echo "No prior release tag — v${VERSION} will be the first release"
@@ -63,29 +68,35 @@ jobs:
           echo "Version ${VERSION} is newer than ${LATEST} — proceeding with release"
 
       - uses: actions/setup-node@v5
-        if: steps.release_gate.outputs.should_release == 'true'
         with:
           node-version: "24"
 
       # validate.yml runs on this same push, but as an independent workflow that can't gate this
       # one. Re-running its check here is what actually gates the release on it.
       - name: Validate plugin layout before releasing
-        if: steps.release_gate.outputs.should_release == 'true'
         run: node scripts/validate-devin-plugin.mjs
 
       # Tracked files at HEAD only, so nothing left on the runner can end up in the zip.
       - name: Package release artifact
-        if: steps.release_gate.outputs.should_release == 'true'
         run: git archive --format=zip --output=release.zip HEAD -- ':(exclude).github'
 
       # --target creates the tag as part of the release, so a failure can't leave an orphan tag.
       - name: Create GitHub Release
-        if: steps.release_gate.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          gh release create "v${{ steps.version.outputs.version }}" \
+          gh release create "v${VERSION}" \
             release.zip \
             --target "$GITHUB_SHA" \
-            --title "Release v${{ steps.version.outputs.version }}" \
+            --title "Release v${VERSION}" \
             --generate-notes
+
+      # Only when the gate passed: a gate failure means v${VERSION} was already released by an
+      # earlier run, and deleting it here would destroy a shipped release.
+      - name: Roll back a partially published release
+        if: failure() && steps.release_gate.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: gh release delete "v${VERSION}" --yes --cleanup-tag || true
