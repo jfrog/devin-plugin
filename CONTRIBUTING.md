@@ -57,7 +57,7 @@ To cut a release:
 
 The bump is reviewed in the PR that makes it. Merging without bumping the manifest fails the release rather than silently skipping or re-tagging a shipped version.
 
-So once `v0.3.0` is tagged, **every** merge to `main` must carry a manifest bump. There is no opt-out: a merge that leaves `.version` at the released value turns the `Release` workflow red, and it stays red until a bump lands. Roll the bump into the PR itself rather than pushing a follow-up "bump only" commit.
+**Every** merge to `main` must carry a manifest bump. There is no opt-out: a merge that leaves `.version` at the released value turns the `Release` workflow red, and it stays red until a bump lands. Roll the bump into the PR itself rather than pushing a follow-up "bump only" commit.
 
 The workflow reads the version from the manifest, runs the same plugin-layout check as the `validate` PR workflow, packages the tracked files at `HEAD` (minus `.github/`) into `release.zip`, and creates the `vX.Y.Z` tag as part of publishing the GitHub Release.
 
@@ -67,11 +67,7 @@ Three things to know before changing it:
 - The tag is created by the release, not before it. `gh release create --target` does both in one API call, so a failed run can't leave a tag behind with no release attached to it.
 - A run that fails *after* the version gate passed deletes the release and its tag on the way out, so the same version can be retried on the next push. That rollback is gated on the version gate having passed — otherwise a run that stopped at "already released" would delete the shipped release it was complaining about.
 
-### The v0.3.0 catch-up release
-
-The manifest reached `0.3.0` while the latest tag was still `v0.1.0`. Under the old release-marker mechanism a bump only shipped if a marker rode along with it, so `0.1.1`, `0.2.0`, and `0.3.0` were each bumped and never tagged. The first merge to `main` under the version-file mechanism therefore cuts a single catch-up release of `v0.3.0`, publishing the current tree under the version the manifest already carries. That merge is the one exception to the bump-every-merge rule above: the bump it releases already happened, in an earlier PR. The skipped versions are not back-filled — nothing was ever released as `0.1.1` or `0.2.0`, and `v0.3.0` ships the tree that supersedes both.
-
-Pull requests branched before this change are the other side of that gap. Any PR whose `.version` is `0.3.0` or lower would land a manifest at or behind the `v0.3.0` tag and turn the release red on merge. That covers the open skills-sync PRs [#6](https://github.com/jfrog/devin-plugin/pull/6), [#7](https://github.com/jfrog/devin-plugin/pull/7), and [#9](https://github.com/jfrog/devin-plugin/pull/9). Rebase each onto `main` and bump past `0.3.0`, or close it and regenerate the sync — #6 in particular re-syncs a bundle version that has already merged. Sort this out before merging them, not after the red run.
+PRs branched before the latest tag must rebase onto `main` and bump past the current released version, or they land a manifest equal to (or behind) the latest tag and turn `Release` red. That currently includes [#12](https://github.com/jfrog/devin-plugin/pull/12) (`0.3.1`, already tagged as `v0.3.1`). Sort this out before merging them, not after the red run.
 
 ## Build order
 

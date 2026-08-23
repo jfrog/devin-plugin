@@ -45,11 +45,10 @@ jobs:
         run: |
           set -euo pipefail
           git fetch --tags origin
-          # git's globs can't anchor digits, so the shape is enforced with grep instead. grep
-          # exits 1 when nothing matches, which is the legitimate first-release case below.
-          LATEST=$(git tag -l | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1) || LATEST=""
+          # git's globs can't anchor digits, so the shape is enforced with grep instead. Scope
+          # `|| true` to grep so a real `git tag` failure is not treated as "no tags yet".
+          LATEST=$(git tag -l | { grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' || true; } | sort -V | tail -1)
           if [ -z "$LATEST" ]; then
-            echo "should_release=true" >> "$GITHUB_OUTPUT"
             echo "No prior release tag — v${VERSION} will be the first release"
             exit 0
           fi
@@ -64,7 +63,6 @@ jobs:
             echo "::error::.devin-plugin/plugin.json version ${VERSION} is older than the latest release ${LATEST} — check for an accidental revert"
             exit 1
           fi
-          echo "should_release=true" >> "$GITHUB_OUTPUT"
           echo "Version ${VERSION} is newer than ${LATEST} — proceeding with release"
 
       - uses: actions/setup-node@v5
