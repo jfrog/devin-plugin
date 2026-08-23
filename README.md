@@ -22,7 +22,7 @@ Skill content is vendored under `skills/` — see [VENDOR.md](VENDOR.md).
 
 ## JFrog MCP
 
-The plugin registers this MCP server (declared in `mcp_config.json` and referenced from `.devin-plugin/plugin.json`):
+The plugin registers this MCP server (declared in `mcp.json` and referenced from `.devin-plugin/plugin.json`):
 
 ```json
 {
@@ -74,7 +74,7 @@ Confirm `jfrog` is listed (and Connected after OAuth). Ask the agent to list too
 ```
 devin-plugin/
 ├── .devin-plugin/plugin.json
-├── mcp_config.json           # JFrog Platform MCP (remote HTTP + OAuth)
+├── mcp.json                  # JFrog Platform MCP (remote HTTP + OAuth)
 ├── skills/
 │   ├── jfrog/
 │   ├── jfrog-init/
