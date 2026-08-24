@@ -196,7 +196,7 @@ Split Step 2 inputs by `isRequired`:
 Handling: **secrets** (`isSecret=true`) MUST be a value reference, NEVER a raw
 value — never take a secret in chat, echo it, or write it into config.
 **Non-secrets** may be a literal or a reference. For the exact syntax and, on
-shell-based harnesses (Claude Code, Cursor, Codex, Devin Desktop, OpenCode), how the user
+shell-based harnesses (Claude Code, Cursor, Codex, Devin, OpenCode), how the user
 exports/persists the variable, see the harness file and
 [references/persisting-env-vars.md](references/persisting-env-vars.md). (VS Code
 prompts for `inputs` values on first start — no shell export.)
