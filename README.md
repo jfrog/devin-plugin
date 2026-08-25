@@ -96,7 +96,7 @@ reports, then restart Devin.
 
 | Symptom | Do this | Do **not** do this |
 | --- | --- | --- |
-| MCP missing after install | Confirm `JFROG_PLATFORM_URL` is set in the **launch** environment, re-run `/jfrog:jfrog-init`, complete `devin mcp login jfrog`, restart Devin, then `/mcp`. | Assume exporting `JFROG_URL` mid-session will register MCP. |
+| MCP missing after install | Confirm `JFROG_PLATFORM_URL` is set in the **launch** environment, re-run `/jfrog:jfrog-init`, complete `devin mcp login jfrog`, restart Devin, then `/mcp`. | Assume changing env vars mid-session will register MCP. |
 | `/jfrog:jfrog-init` stopped at CLI/auth | Follow the skill prompt, then **re-run `/jfrog:jfrog-init`**. | Skip init and only export env vars. |
 | Host placeholder unresolved | Set `JFROG_PLATFORM_URL` before starting Devin, restart, re-run init. | Change the variable after Devin is already running. |
 
