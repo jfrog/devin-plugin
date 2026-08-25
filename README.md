@@ -4,6 +4,10 @@ JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact 
 
 > **Current version:** `0.3.0` — skills from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pinned at `v0.25.0`) and a bundled JFrog MCP entry.
 
+> **Install flow:** Follow the [shared install, verify, and recovery guide](https://github.com/jfrog/claude-plugin/blob/main/docs/shared-install-and-verify.md) for the cross-harness rules on initialization, environment variables, restart, verification, and recovery. This README documents **Devin-only** differences.
+>
+> **Web doc source:** [`docs/install-jfrog-plugin-for-devin.md`](docs/install-jfrog-plugin-for-devin.md) is the source for the published Devin install page.
+
 ## Skills
 
 | Skill | Description |
@@ -52,6 +56,22 @@ The plugin registers this MCP server (declared in `mcp.json` and referenced from
 devin plugins install jfrog/devin-plugin -y
 ```
 
+Then, in a Devin session, run initialization:
+
+```text
+/jfrog:jfrog-init
+```
+
+`jfrog-init` checks the JFrog CLI, server config, MCP registration, project
+resolution, and AI Catalog entitlement, and walks you through anything missing.
+Restart Devin afterwards so the MCP entry reloads.
+
+`JFROG_PLATFORM_URL` must be set in the environment that launches Devin **before**
+you start the session, because `mcp.json` resolves `${env:JFROG_PLATFORM_URL}` at
+launch. Setting it mid-session, or setting other JFrog variables afterwards, does
+not repair a failed initialization — fix the reported step and re-run
+`/jfrog:jfrog-init`.
+
 ## Verify
 
 ```bash
@@ -68,6 +88,14 @@ In a Devin CLI or Devin Local session:
 ```
 
 Confirm `jfrog` is listed (and Connected after OAuth). Ask the agent to list tools for `jfrog` — it should expose at least one tool.
+
+Verification is a required install step, not a troubleshooting fallback.
+
+## Recovery
+
+If a check above fails, re-run `/jfrog:jfrog-init` after fixing the step it
+reports, then restart Devin. For symptom-by-symptom guidance shared across
+harnesses, see the [recovery playbook](https://github.com/jfrog/claude-plugin/blob/main/docs/shared-install-and-verify.md#recovery-playbook).
 
 ## Repository layout
 

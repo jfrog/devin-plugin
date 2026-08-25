@@ -22,3 +22,8 @@ jobs:
 
       - name: Validate plugin layout
         run: node scripts/validate-devin-plugin.mjs
+
+      - name: Validate install/recovery docs
+        run: |
+          node --test scripts/validate-install-docs.test.mjs
+          JFROG_PLUGIN_HARNESS=devin node scripts/validate-install-docs.mjs
