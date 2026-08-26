@@ -4,8 +4,6 @@ JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact 
 
 > **Current version:** `0.3.0` — skills from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pinned at `v0.25.0`) and a bundled JFrog MCP entry.
 
-> **Install, verify, and recovery:** [`docs/install-jfrog-plugin-for-devin.md`](docs/install-jfrog-plugin-for-devin.md) is the source for the published Devin install page.
-
 ## Skills
 
 | Skill | Description |

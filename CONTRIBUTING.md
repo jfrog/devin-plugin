@@ -17,7 +17,7 @@ node scripts/validate-devin-plugin.mjs
 node scripts/validate-install-docs.mjs
 ```
 
-This checks `.devin-plugin/plugin.json`, skill frontmatter, and install/recovery doc invariants (Verify section, web doc source, no links to other plugin repositories).
+This checks `.devin-plugin/plugin.json`, skill frontmatter, and install/recovery doc invariants (Verify section, no links to other plugin repositories).
 
 4. **Test** by installing the plugin from the repository root (the repo root **is** the plugin root):
 
