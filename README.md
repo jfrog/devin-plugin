@@ -2,7 +2,7 @@
 
 JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact management, security scanning, and supply-chain workflows, plus the JFrog Platform MCP server (remote HTTP + OAuth).
 
-> **Current version:** `0.3.0` — skills from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pinned at `v0.25.0`) and a bundled JFrog MCP entry.
+> **Current version:** `0.3.0` — skills from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pinned at `v0.31.1`) and a bundled JFrog MCP entry.
 
 ## Skills
 
@@ -11,10 +11,10 @@ JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact 
 | `jfrog` | JFrog Platform operations via CLI and APIs (Artifactory, Xray, access, projects, and more). |
 | `jfrog-init` | Plugin readiness / setup (detect CLI, config, MCP, and related bootstrap steps). |
 | `jfrog-mcp-management` | Install, list, and remove MCP servers through JFrog Agent Guard; browse the JFrog MCP catalog. |
-| `jfrog-ai-catalog-skills` | Discover, install, manage, and publish agent skills from the JFrog AI Catalog via `jf skills` and Agent Guard. |
+| `jfrog-ai-catalog` | Discover, install, manage, and publish agent skills from the JFrog AI Catalog via `jf skills` and Agent Guard. |
 | `jfrog-setup-package-managers` | Bind package managers (npm, pip, Maven, Go, and more) to JFrog Artifactory via `jf setup`. |
 | `jfrog-reference-architecture` | JFrog Platform topology, sizing, deployment patterns, and multi-site guidance. |
-| `jfrog-package-safety-and-download` | Check package safety and download via Artifactory. |
+| `jfrog-package-curation` | Check package safety and download via Artifactory. |
 
 After install, Devin exposes them as `/jfrog:<skill-name>` (for example `/jfrog:jfrog-mcp-management`).
 
@@ -44,7 +44,7 @@ The plugin registers this MCP server (declared in `mcp.json` and referenced from
 - **Devin CLI** — see [Devin docs](https://docs.devin.ai/)
 - **Devin CLI plugins enabled** for your organization (`devin plugins install` must be allowed)
 - **`JFROG_PLATFORM_URL`** — JFrog platform host only (no `https://`, no trailing `/`). Required for the bundled MCP entry.
-- **Skill runtime** (when using the skills) — `jf` CLI, `jq`, and `curl` on `PATH`, plus a configured JFrog instance (`jf config add`). See [jfrog-skills requirements](https://github.com/jfrog/jfrog-skills/blob/v0.25.0/README.md#requirements).
+- **Skill runtime** (when using the skills) — `jf` CLI, `jq`, and `curl` on `PATH`, plus a configured JFrog instance (`jf config add`). See [jfrog-skills requirements](https://github.com/jfrog/jfrog-skills/blob/v0.31.1/README.md#requirements).
 
 ## Installation
 
@@ -79,10 +79,10 @@ devin-plugin/
 │   ├── jfrog/
 │   ├── jfrog-init/
 │   ├── jfrog-mcp-management/
-│   ├── jfrog-ai-catalog-skills/
+│   ├── jfrog-ai-catalog/
 │   ├── jfrog-setup-package-managers/
 │   ├── jfrog-reference-architecture/
-│   └── jfrog-package-safety-and-download/
+│   └── jfrog-package-curation/
 ├── .github/scripts/          # sync-skills vendoring
 ├── LICENSE
 ├── README.md
