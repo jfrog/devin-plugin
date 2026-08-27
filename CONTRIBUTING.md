@@ -14,10 +14,9 @@ All contributors must sign the [JFrog CLA](https://jfrog.com/cla/) before contri
 
 ```bash
 node scripts/validate-devin-plugin.mjs
-node scripts/validate-install-docs.mjs
 ```
 
-This checks `.devin-plugin/plugin.json`, skill frontmatter, and install/recovery doc invariants (Verify section, no links to other plugin repositories).
+This checks `.devin-plugin/plugin.json` and skill frontmatter.
 
 4. **Test** by installing the plugin from the repository root (the repo root **is** the plugin root):
 
