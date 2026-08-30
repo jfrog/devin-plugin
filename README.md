@@ -52,6 +52,22 @@ The plugin registers this MCP server (declared in `mcp.json` and referenced from
 devin plugins install jfrog/devin-plugin -y
 ```
 
+Then, in a Devin session, run initialization:
+
+```text
+/jfrog:jfrog-init
+```
+
+`jfrog-init` checks the JFrog CLI, server config, MCP registration, project
+resolution, and AI Catalog entitlement, and walks you through anything missing.
+Restart Devin afterwards so the MCP entry reloads.
+
+`JFROG_PLATFORM_URL` must be set in the environment that launches Devin **before**
+you start the session, because `mcp.json` resolves `${env:JFROG_PLATFORM_URL}` at
+launch. Setting it mid-session, or setting other JFrog variables afterwards, does
+not repair a failed initialization — fix the reported step and re-run
+`/jfrog:jfrog-init`.
+
 ## Verify
 
 ```bash
@@ -68,6 +84,19 @@ In a Devin CLI or Devin Local session:
 ```
 
 Confirm `jfrog` is listed (and Connected after OAuth). Ask the agent to list tools for `jfrog` — it should expose at least one tool.
+
+Verification is a required install step, not a troubleshooting fallback.
+
+## Recovery
+
+If a check above fails, re-run `/jfrog:jfrog-init` after fixing the step it
+reports, then restart Devin.
+
+| Symptom | Do this | Do **not** do this |
+| --- | --- | --- |
+| MCP missing after install | Confirm `JFROG_PLATFORM_URL` is set in the **launch** environment, re-run `/jfrog:jfrog-init`, complete `devin mcp login jfrog`, restart Devin, then `/mcp`. | Assume changing env vars mid-session will register MCP. |
+| `/jfrog:jfrog-init` stopped at CLI/auth | Follow the skill prompt, then **re-run `/jfrog:jfrog-init`**. | Skip init and only export env vars. |
+| Host placeholder unresolved | Set `JFROG_PLATFORM_URL` before starting Devin, restart, re-run init. | Change the variable after Devin is already running. |
 
 ## Repository layout
 

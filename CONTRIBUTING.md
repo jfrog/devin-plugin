@@ -16,7 +16,7 @@ All contributors must sign the [JFrog CLA](https://jfrog.com/cla/) before contri
 node scripts/validate-devin-plugin.mjs
 ```
 
-This checks `.devin-plugin/plugin.json` and walks every `skills/*/SKILL.md` for required YAML frontmatter.
+This checks `.devin-plugin/plugin.json` and skill frontmatter.
 
 4. **Test** by installing the plugin from the repository root (the repo root **is** the plugin root):
 
