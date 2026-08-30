@@ -14,7 +14,7 @@ JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact 
 | `jfrog-ai-catalog-skills` | Discover, install, manage, and publish agent skills from the JFrog AI Catalog via `jf skills` and Agent Guard. |
 | `jfrog-setup-package-managers` | Bind package managers (npm, pip, Maven, Go, and more) to JFrog Artifactory via `jf setup`. |
 | `jfrog-reference-architecture` | JFrog Platform topology, sizing, deployment patterns, and multi-site guidance. |
-| `jfrog-package-safety-and-download` | Check package safety and download via Artifactory. |
+| `jfrog-package-curation` | Check package safety and download via Artifactory. |
 
 After install, Devin exposes them as `/jfrog:<skill-name>` (for example `/jfrog:jfrog-mcp-management`).
 
@@ -82,7 +82,7 @@ devin-plugin/
 │   ├── jfrog-ai-catalog-skills/
 │   ├── jfrog-setup-package-managers/
 │   ├── jfrog-reference-architecture/
-│   └── jfrog-package-safety-and-download/
+│   └── jfrog-package-curation/
 ├── .github/scripts/          # sync-skills vendoring
 ├── LICENSE
 ├── README.md
