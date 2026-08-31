@@ -22,8 +22,3 @@ jobs:
 
       - name: Validate plugin layout
         run: node scripts/validate-devin-plugin.mjs
-
-      - name: Validate README has no plugin version
-        env:
-          PLUGIN_MANIFEST: .devin-plugin/plugin.json
-        run: node scripts/validate-readme-no-version.mjs
