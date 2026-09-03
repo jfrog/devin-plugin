@@ -43,7 +43,7 @@ This downloads the pinned upstream tarball and replaces the contents of `skills/
 ## Pre-release checklist
 
 - [ ] `node scripts/validate-devin-plugin.mjs` passes.
-- [ ] Version bumped in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) when the plugin changes.
+- [ ] Version bumped in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) — required on every PR to `main`.
 - [ ] No secrets, credentials, or files under `**/local-cache/` committed.
 - [ ] If the skill tree changed: `pin` in `.github/scripts/sync-skills-vendor.json` matches the upstream tag the new tree was generated from.
 - [ ] Smoke-test: `devin plugins install . -y` and `devin plugins info jfrog` from the repo root.
@@ -53,19 +53,21 @@ This downloads the pinned upstream tarball and replaces the contents of `skills/
 To cut a release:
 
 1. In your PR, bump `.version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json). That manifest is the only place the version lives.
-2. Merge to `main` with `[major]`, `[minor]`, or `[patch]` in the commit **subject** - the first
-   line. A marker further down in the body is ignored on purpose: this repo squash-merges, and
-   GitHub pre-fills the squash body from the branch commits or the PR description, either of
-   which may quote a marker while only documenting it.
+2. Merge to `main`. Every push to `main` compares the manifest version against the latest release tag: if the version is newer, a release proceeds; if it matches the latest tag, the workflow fails with a clear "already released" error; if it is older, it fails with a revert warning.
 
-The marker only decides *whether* to release; the version comes from the manifest either way, so the bump is reviewed in the PR that makes it. There is no bot push to `main`. Merging a marker without bumping the manifest fails the release rather than re-tagging a shipped version.
+The bump is reviewed in the PR that makes it. Merging without bumping the manifest fails the release rather than silently skipping or re-tagging a shipped version.
 
-The workflow reads the version from the manifest, refuses to continue if that version is already tagged, runs the same plugin-layout check as the `validate` PR workflow, packages the tracked files at `HEAD` (minus `.github/`) into `release.zip`, and creates the `vX.Y.Z` tag as part of publishing the GitHub Release.
+**Every** merge to `main` must carry a manifest bump. There is no opt-out: a merge that leaves `.version` at the released value turns the `Release` workflow red, and it stays red until a bump lands. Roll the bump into the PR itself rather than pushing a follow-up "bump only" commit.
 
-Two things to know before changing it:
+The workflow reads the version from the manifest, runs the same plugin-layout check as the `validate` PR workflow, packages the tracked files at `HEAD` (minus `.github/`) into `release.zip`, and creates the `vX.Y.Z` tag as part of publishing the GitHub Release.
+
+Things to know before changing it:
 
 - Validation runs inside the release job. `validate.yml` triggers on the same push, but as an independent workflow, so it can be red while a release still goes out. Re-running its check in the release job is what actually gates the release on it.
 - The tag is created by the release, not before it. `gh release create --target` does both in one API call, so a failed run can't leave a tag behind with no release attached to it.
+- A run that fails *after* the version gate passed deletes the release and its tag on the way out, so the same version can be retried on the next push. That rollback is gated on the version gate having passed — otherwise a run that stopped at "already released" would delete the shipped release it was complaining about.
+
+A PR branched before the latest tag carries a stale manifest. Merge the current `main` into it and bump past the released version, or the merge lands a `.version` equal to (or behind) the newest `vX.Y.Z` tag and turns `Release` red. Check the latest tag before merging, not after the red run.
 
 ## Build order
 
