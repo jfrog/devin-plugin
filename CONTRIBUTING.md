@@ -16,7 +16,7 @@ All contributors must sign the [JFrog CLA](https://jfrog.com/cla/) before contri
 node scripts/validate-devin-plugin.mjs
 ```
 
-This checks `.devin-plugin/plugin.json` and walks every `skills/*/SKILL.md` for required YAML frontmatter.
+This checks `.devin-plugin/plugin.json` and skill frontmatter.
 
 4. **Test** by installing the plugin from the repository root (the repo root **is** the plugin root):
 
@@ -67,7 +67,7 @@ Three things to know before changing it:
 - The tag is created by the release, not before it. `gh release create --target` does both in one API call, so a failed run can't leave a tag behind with no release attached to it.
 - A run that fails *after* the version gate passed deletes the release and its tag on the way out, so the same version can be retried on the next push. That rollback is gated on the version gate having passed — otherwise a run that stopped at "already released" would delete the shipped release it was complaining about.
 
-PRs branched before the latest tag must rebase onto `main` and bump past the current released version, or they land a manifest equal to (or behind) the latest tag and turn `Release` red. That currently includes [#12](https://github.com/jfrog/devin-plugin/pull/12) (`0.3.1`, already tagged as `v0.3.1`). Sort this out before merging them, not after the red run.
+A PR branched before the latest tag carries a stale manifest. Merge the current `main` into it and bump past the released version, or the merge lands a `.version` equal to (or behind) the newest `vX.Y.Z` tag and turns `Release` red. Check the latest tag before merging, not after the red run.
 
 ## Build order
 
