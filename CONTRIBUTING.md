@@ -43,7 +43,7 @@ This downloads the pinned upstream tarball and replaces the contents of `skills/
 ## Pre-release checklist
 
 - [ ] `node scripts/validate-devin-plugin.mjs` passes.
-- [ ] Version bumped in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) — required on every PR merged to `main`, see [Releasing](#releasing).
+- [ ] Version bumped in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) — required on every PR to `main`.
 - [ ] No secrets, credentials, or files under `**/local-cache/` committed.
 - [ ] If the skill tree changed: `pin` in `.github/scripts/sync-skills-vendor.json` matches the upstream tag the new tree was generated from.
 - [ ] Smoke-test: `devin plugins install . -y` and `devin plugins info jfrog` from the repo root.
@@ -61,7 +61,7 @@ The bump is reviewed in the PR that makes it. Merging without bumping the manife
 
 The workflow reads the version from the manifest, runs the same plugin-layout check as the `validate` PR workflow, packages the tracked files at `HEAD` (minus `.github/`) into `release.zip`, and creates the `vX.Y.Z` tag as part of publishing the GitHub Release.
 
-Three things to know before changing it:
+Things to know before changing it:
 
 - Validation runs inside the release job. `validate.yml` triggers on the same push, but as an independent workflow, so it can be red while a release still goes out. Re-running its check in the release job is what actually gates the release on it.
 - The tag is created by the release, not before it. `gh release create --target` does both in one API call, so a failed run can't leave a tag behind with no release attached to it.
