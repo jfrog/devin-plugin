@@ -126,7 +126,7 @@ node scripts/validate-devin-plugin.mjs
 
 ## Releasing
 
-Bump `version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) when you publish a new release, then tag on GitHub. See [`.github/workflows/release.yml`](.github/workflows/release.yml).
+Bump `version` in [`.devin-plugin/plugin.json`](.devin-plugin/plugin.json) in the PR. After it merges to `main`, the [release workflow](.github/workflows/release.yml) validates the forward version bump and creates the GitHub release and tag.
 
 ## License
 
