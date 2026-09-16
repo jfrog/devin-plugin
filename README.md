@@ -4,6 +4,8 @@ JFrog plugin for [Devin](https://devin.ai/): JFrog Platform skills for artifact 
 
 > Skills from [jfrog/jfrog-skills](https://github.com/jfrog/jfrog-skills) (pin in [`.github/scripts/sync-skills-vendor.json`](.github/scripts/sync-skills-vendor.json)) and a bundled JFrog MCP entry. Plugin releases are tagged on GitHub — do not duplicate version numbers here.
 
+> **Preview Notice:** This Plugin is in preview and licensed under the Apache License 2.0. For clarity: This software is provided "as-is" without warranty of any kind, and without support obligations or service level commitments. Behavior, APIs, conventions, and structure may change without notice between releases. JFrog makes no guarantees of backward compatibility during the preview release cycle. Use in production environments is at your own risk.
+
 ## Skills
 
 | Skill | Description |
